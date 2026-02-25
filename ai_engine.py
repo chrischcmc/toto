@@ -122,9 +122,9 @@ class TotoBrain:
         self.number_stats = {n: NumberStats(number=n) for n in range(1, TOTO_MAX_NUM + 1)}
         self.pair_frequency = defaultdict(int)
         self.triplet_frequency = defaultdict(int)
-        
+
         file_path = Path(self.csv_file)
-        
+
         if not file_path.exists():
             logger.warning(f"{self.csv_file} not found. AI will use pure random mode.")
             return
@@ -133,44 +133,59 @@ class TotoBrain:
             with open(file_path, "r", encoding="utf-8-sig") as f:
                 reader = csv.reader(f)
                 header = next(reader, None)
-                
+
                 for row in reader:
-                    if len(row) >= 9:
-                        try:
-                            # ToTo.csv format: Draw, Date, N1, N2, N3, N4, N5, N6, Additional, ...
-                            draw_num = int(row[0]) if row[0].isdigit() else 0
-                            date = row[1]
-                            numbers = [int(row[i]) for i in range(2, 8)]
-                            additional = int(row[8]) if row[8].isdigit() else 0
-                            
-                            # Calculate distribution stats
-                            low = sum(1 for n in numbers if n <= 25)
-                            high = 6 - low
-                            odd = sum(1 for n in numbers if n % 2 == 1)
-                            even = 6 - odd
-                            
-                            self.history.append(DrawResult(
-                                draw_number=draw_num,
-                                date=date,
-                                numbers=sorted(numbers),
-                                additional=additional,
-                                low_count=low,
-                                high_count=high,
-                                odd_count=odd,
-                                even_count=even
-                            ))
-                        except (ValueError, IndexError):
-                            continue
-            
+                  try:
+                      # Require at least 9 columns (Draw, Date, 6 numbers, Additional)
+                      if len(row) < 9:
+                          logger.warning(f"Skipping short row: {row}")
+                          continue
+
+                      draw_num = int(row[0]) if row[0].isdigit() else 0
+                      date = row[1]
+
+                      # Winning numbers are always columns 2–7
+                      numbers = []
+                      for i in range(2, 8):
+                          if i < len(row) and row[i].isdigit():
+                              numbers.append(int(row[i]))
+                      if len(numbers) != 6:
+                          logger.warning(f"Skipping row with bad numbers: {row}")
+                          continue
+
+                      # Additional number is column 8
+                      additional = int(row[8]) if row[8].isdigit() else 0
+
+                      # Calculate distribution stats
+                      low = sum(1 for n in numbers if n <= 25)
+                      high = 6 - low
+                      odd = sum(1 for n in numbers if n % 2 == 1)
+                      even = 6 - odd
+
+                      self.history.append(DrawResult(
+                          draw_number=draw_num,
+                          date=date,
+                          numbers=sorted(numbers),
+                          additional=additional,
+                          low_count=low,
+                          high_count=high,
+                          odd_count=odd,
+                          even_count=even
+                      ))
+                  except Exception as e:
+                      logger.warning(f"Skipping bad row: {row} ({e})")
+                      continue
+
             # Process statistics after loading
             self._calculate_all_statistics()
-            
+
             logger.info(f"Loaded {len(self.history)} draws for analysis.")
             if self.history:
                 logger.info(f"Date range: {self.history[-1].date} to {self.history[0].date}")
-            
+
         except Exception as e:
             logger.error(f"Failed to load history: {e}")
+
     
     def _load_ml_models(self) -> None:
         """
