@@ -164,3 +164,40 @@ if HAS_SCRAPER:
     fig, ax = plt.subplots()
     ax.bar(range(1,50), freq)
     st.pyplot(fig)
+
+
+# =========================================
+# BACKTEST RESULTS
+# =========================================
+st.divider()
+st.subheader("Backtest Results")
+
+if brain:
+    # Sidebar control for number of test draws
+    test_draws = st.sidebar.slider("Backtest Draws", min_value=50, max_value=500, value=100, step=50)
+
+    strategies = [
+        PredictionStrategy.HOT_NUMBERS,
+        PredictionStrategy.COLD_NUMBERS,
+        PredictionStrategy.BALANCED,
+        PredictionStrategy.ENSEMBLE,
+    ]
+
+    for strat in strategies:
+        try:
+            results = brain.backtest(strategy=strat, test_draws=test_draws)
+            if "error" in results:
+                st.error(f"{strat.value.upper()}: {results['error']}")
+            else:
+                st.write(f"**{strat.value.upper()}**")
+                st.write(f"- Avg Hits: {results['avg_hits']}")
+                st.write(f"- Max Hits: {results['max_hits']}")
+                st.write(f"- Hit ≥3: {results['hit_3_plus']} times")
+                st.write(f"- Hit ≥4: {results['hit_4_plus']} times")
+                st.write(f"- Distribution: {results['hits_distribution']}")
+                st.divider()
+        except Exception as e:
+            st.error(f"{strat.value.upper()} backtest failed: {e}")
+else:
+    st.warning("AI engine not loaded — cannot run backtest.")
+
