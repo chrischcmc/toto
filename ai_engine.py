@@ -41,10 +41,10 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 # Configuration Constants
-TOTO_CSV_FILE = "ToTo.csv"  # Use the real comprehensive data file
+# Always resolve ToTo.csv relative to this file's directory
+TOTO_CSV_FILE = str(Path(__file__).parent / "ToTo.csv")
 TOTO_MAX_NUM = 49
 TOTO_PICK_COUNT = 6
-
 
 class PredictionStrategy(Enum):
     """Available prediction strategies."""
