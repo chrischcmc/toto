@@ -29,6 +29,18 @@ st.set_page_config(
 
 st.title("🎯 SG Toto AI — Prediction Engine")
 
+
+# =========================================
+# LOAD BRAIN (cached)
+# =========================================
+@st.cache_resource
+def load_brain():
+    if HAS_AI:
+        return TotoBrain()
+    return None
+
+brain = load_brain()
+
 # =========================================
 # MAIN PREDICT BUTTON
 # =========================================
@@ -45,18 +57,6 @@ if st.button("Predict"):
     else:
         nums = sorted(random.sample(range(1,50),6))
         st.warning(f"Fallback random: {nums}")
-
-# =========================================
-# LOAD BRAIN (cached)
-# =========================================
-@st.cache_resource
-def load_brain():
-    if HAS_AI:
-        return TotoBrain()
-    return None
-
-brain = load_brain()
-
 
 # =========================================
 # SIDEBAR CONTROLS
