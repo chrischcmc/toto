@@ -29,6 +29,22 @@ st.set_page_config(
 
 st.title("🎯 SG Toto AI — Prediction Engine")
 
+# =========================================
+# MAIN PREDICT BUTTON
+# =========================================
+if st.button("Predict"):
+    st.subheader("Prediction Results")
+
+    if brain:
+        try:
+            result = brain.predict(PredictionStrategy.ENSEMBLE)
+            st.success(f"Recommended: {result.numbers}")
+            st.write(f"Confidence: {result.confidence*100:.1f}%")
+        except Exception as e:
+            st.error(f"Prediction failed: {e}")
+    else:
+        nums = sorted(random.sample(range(1,50),6))
+        st.warning(f"Fallback random: {nums}")
 
 # =========================================
 # LOAD BRAIN (cached)
