@@ -42,9 +42,10 @@ brain = load_brain()
 
 # Debugging banners — now brain is defined 
 if brain is None: 
-    st.error("❌ Brain not initialized — AI engine not loaded.") 
-else: st.success("✅ Brain initialized successfully.") 
-    st.warning(f"📊 History length: {len(brain.history)} draws loaded")
+    st.error("Brain not initialized — AI engine not loaded.") 
+else: 
+    st.success("Brain initialized successfully.") 
+    st.warning(f"History length: {len(brain.history)} draws loaded")
 
 # =========================================
 # MAIN PREDICT BUTTON
