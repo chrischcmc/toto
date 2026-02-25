@@ -41,7 +41,10 @@ def load_brain():
 
 brain = load_brain()
 
-# Debugging lines — add them here st.write("Brain loaded:", brain is not None) if brain: st.write("History length:", len(brain.history))
+# Debugging lines — add them here 
+st.write("Brain loaded:", brain is not None) 
+if brain: 
+    st.write("History length:", len(brain.history))
 
 # =========================================
 # MAIN PREDICT BUTTON
