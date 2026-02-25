@@ -29,6 +29,12 @@ st.set_page_config(
 
 st.title("🎯 SG Toto AI — Prediction Engine")
 
+# Debugging lines — add them here
+if brain is None:
+    st.error("Brain not initialized — AI engine not loaded.")
+else:
+    st.success("Brain initialized successfully.")
+    st.warning(f"History length: {len(brain.history)}")
 
 # =========================================
 # LOAD BRAIN (cached)
@@ -40,13 +46,6 @@ def load_brain():
     return None
 
 brain = load_brain()
-
-# Debugging lines — add them here
-if brain is None:
-    st.error("Brain not initialized — AI engine not loaded.")
-else:
-    st.success("Brain initialized successfully.")
-    st.warning(f"History length: {len(brain.history)}")
 
 # =========================================
 # MAIN PREDICT BUTTON
