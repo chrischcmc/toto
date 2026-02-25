@@ -40,18 +40,6 @@ def load_brain():
 
 brain = load_brain()
 
-# =========================================
-# DEBUG INFO SECTION
-# =========================================
-st.divider()
-st.subheader("Debug Info")
-
-if brain is None:
-    st.error("Brain not initialized — AI engine not loaded.")
-else:
-    st.success("Brain initialized successfully.")
-    st.warning(f"History length: {len(brain.history)} draws loaded")
-
 # Also log to console for Render logs
 print("Brain initialized:", brain is not None)
 if brain:
