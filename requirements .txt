@@ -1,0 +1,33 @@
+# Singapore Pools TOTO Lottery AI System
+# Core Dependencies
+
+# Web Scraping
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+
+# Machine Learning & AI
+xgboost>=2.0.0
+scikit-learn>=1.3.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Data Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Data Storage & Processing
+joblib>=1.3.0
+
+# UI (usually bundled with Python)
+# tkinter - included with Python standard library
+
+# Development & Testing (Optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Optional: GPU acceleration
+# xgboost[gpu]>=2.0.0  # Uncomment if you have CUDA-capable GPU
